@@ -1,0 +1,27 @@
+{
+	"info": {
+		"_postman_id": "4bc0f966-e288-401e-af76-8d7a6c5666b9",
+		"name": "MyTemplateRepository",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23326688"
+	},
+	"item": [
+		{
+			"name": "/about",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL_BASE_API}}/about",
+					"host": [
+						"{{URL_BASE_API}}"
+					],
+					"path": [
+						"about"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
