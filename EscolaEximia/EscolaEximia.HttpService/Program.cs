@@ -2,6 +2,7 @@ using System.Reflection;
 using EscolaEximia.HttpService.Dominio;
 using EscolaEximia.HttpService.Dominio.Inscricoes.Aplicacao;
 using EscolaEximia.HttpService.Dominio.Inscricoes.Infra;
+using EscolaEximia.HttpService.Dominio.Regras.Infra;
 using EscolaEximia.HttpService.infraestrutura;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -30,6 +31,9 @@ try
     builder.Services.AddDbContext<InscricoesDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("InscricoesConnection")));
     builder.Services.AddScoped<InscricoesRepositorio>();
+
+    builder.Services.AddScoped<RegraPorTurmaRepository>();
+
     builder.Services.AddScoped<RealizarInscricaoHandler>();
     builder.Services.AddHostedService<DatabaseInitializer>();
 

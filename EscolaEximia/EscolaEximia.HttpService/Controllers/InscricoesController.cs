@@ -17,12 +17,11 @@ public sealed class InscricoesController : ControllerBase
         [FromServices] RealizarInscricaoHandler handler,
         CancellationToken cancellationToken)
     {
-        var command = new RealizarInscricaoCommand
-        {
-            Aluno = input.CpfAluno,
-            Responsavel = input.CpfResponsavel,
-            Turma = input.CodigoTurma
-        };
+        var command = new RealizarInscricaoCommand(
+            Aluno: input.CpfAluno,
+            Responsavel: input.CpfResponsavel,
+            Turma: input.CodigoTurma
+        );
 
         var result = await handler.Handle(command, cancellationToken);
 
