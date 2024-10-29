@@ -1,7 +1,6 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using EscolaEximia.HttpService.Dominio.Factories;
 using EscolaEximia.HttpService.Dominio.Infraestrutura;
 using EscolaEximia.HttpService.Handlers;
 using EscolaEximia.HttpService.infraestrutura;
@@ -49,8 +48,6 @@ try
     builder.Services.AddScoped<RealizarInscricaoHandler>();
 
     //builder.Services.AddHostedService<DatabaseInitializer>();
-
-    builder.Services.AddSingleton<InscricaoFactory>();
 
     //builder.Host.UseSerilog();
 
