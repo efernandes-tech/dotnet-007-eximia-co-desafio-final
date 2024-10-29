@@ -1,6 +1,7 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using EscolaEximia.HttpService.Dominio.Factories;
 using EscolaEximia.HttpService.Dominio.Infraestrutura;
 using EscolaEximia.HttpService.Handlers;
 using EscolaEximia.HttpService.infraestrutura;
@@ -38,17 +39,18 @@ try
     builder.Services.AddDbContext<InscricoesDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("InscricoesConnection")));
 
-    /*builder.Services.AddScoped<InscricoesRepositorio>();
-    builder.Services.AddScoped<RealizarInscricaoHandler>();*/
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
     builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
         containerBuilder.RegisterInstance(Log.Logger).As<Serilog.ILogger>().SingleInstance();
-        containerBuilder.RegisterType<InscricoesRepositorio>().AsSelf().InstancePerLifetimeScope();
-        containerBuilder.RegisterType<RealizarInscricaoHandler>().AsSelf().InstancePerLifetimeScope();
     });
 
+    builder.Services.AddScoped<InscricoesRepositorio>();
+    builder.Services.AddScoped<RealizarInscricaoHandler>();
+
     //builder.Services.AddHostedService<DatabaseInitializer>();
+
+    builder.Services.AddSingleton<InscricaoFactory>();
 
     //builder.Host.UseSerilog();
 
