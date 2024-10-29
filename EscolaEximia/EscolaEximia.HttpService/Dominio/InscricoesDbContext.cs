@@ -1,11 +1,13 @@
 using EscolaEximia.HttpService.Dominio.Inscricoes;
+using EscolaEximia.HttpService.Dominio.Inscricoes.Infra.Mapeamento;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace EscolaEximia.HttpService.Dominio;
 
 public class InscricoesDbContext : DbContext
 {
-    public const string DEFAULT_SCHEMA = "inscricoes";
+    public const string DEFAULT_SCHEMA = "Produto_Cliente_Tenant";
 
     public InscricoesDbContext(DbContextOptions<InscricoesDbContext> options) : base(options)
     {
@@ -44,7 +46,27 @@ public class InscricoesDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.ApplyConfiguration(new InscricoesConfigurations());
-        //modelBuilder.ApplyConfiguration(new TurmasConfigurations());
+        modelBuilder.ApplyConfiguration(new InscricaoConfiguration());
+        modelBuilder.ApplyConfiguration(new TurmaConfiguration());
+        modelBuilder.ApplyConfiguration(new AlunoConfiguration());
+    }
+}
+
+public class MigrationsDbContextFactory : IDesignTimeDbContextFactory<InscricoesDbContext>
+{
+    public InscricoesDbContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<InscricoesDbContext>();
+        var connectionString = "Data Source=localhost,1434;Database=Produto_Cliente_Tenant;User Id=sa;Password=Test@12345;TrustServerCertificate=True;";
+
+        optionsBuilder.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        });
+
+        return new InscricoesDbContext(optionsBuilder.Options);
     }
 }

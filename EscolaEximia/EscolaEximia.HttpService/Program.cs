@@ -1,6 +1,4 @@
 using System.Reflection;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using EscolaEximia.HttpService.Dominio;
 using EscolaEximia.HttpService.Dominio.Inscricoes.Aplicacao;
 using EscolaEximia.HttpService.Dominio.Inscricoes.Infra;
@@ -13,17 +11,9 @@ var assemblyName = Assembly.GetExecutingAssembly().GetName();
 var serviceName = assemblyName.Name;
 var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
 
-// Configure Serilog
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .CreateLogger();
-
-builder.Host.UseSerilog();  // Attach Serilog to the Host
-
 try
 {
     Log.ForContext("ApplicationName", serviceName).Information("Starting application");
-
     builder.Services
         .AddEndpointsApiExplorer()
         .AddSwaggerDoc()
@@ -34,23 +24,16 @@ try
         .AddWorkersServices(builder.Configuration)
         .AddOptions()
         .AddCaching()
+        .AddLogs(builder.Configuration, serviceName!)
         .AddCustomMvc();
 
     builder.Services.AddDbContext<InscricoesDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("InscricoesConnection")));
-
-    builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-    builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
-    {
-        containerBuilder.RegisterInstance(Log.Logger).As<Serilog.ILogger>().SingleInstance();
-    });
-
     builder.Services.AddScoped<InscricoesRepositorio>();
     builder.Services.AddScoped<RealizarInscricaoHandler>();
+    builder.Services.AddHostedService<DatabaseInitializer>();
 
-    //builder.Services.AddHostedService<DatabaseInitializer>();
-
-    //builder.Host.UseSerilog();
+    builder.Host.UseSerilog();
 
     var app = builder.Build();
     app.UseHealthChecks("/health-ready");
