@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Reflection.PortableExecutable;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
@@ -116,8 +115,8 @@ public static class ServicesExtensions
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .Enrich.WithProperty("service_name", serviceName)
-        //.Filter.ByExcluding(Matching.FromSource("Microsoft.AspNetCore.Hosting.Diagnostics"))
-        //.Filter.ByExcluding(Matching.FromSource("Microsoft.Hosting.Lifetime"))
+            //.Filter.ByExcluding(Matching.FromSource("Microsoft.AspNetCore.Hosting.Diagnostics"))
+            //.Filter.ByExcluding(Matching.FromSource("Microsoft.Hosting.Lifetime"))
             .Filter.ByExcluding(
                 Matching.FromSource("Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager")
             )

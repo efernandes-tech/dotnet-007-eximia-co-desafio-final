@@ -1,7 +1,5 @@
 using EscolaEximia.HttpService.Dominio.Entidades;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 
 namespace EscolaEximia.HttpService.Dominio.Infraestrutura;
 
