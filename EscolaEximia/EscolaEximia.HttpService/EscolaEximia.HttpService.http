@@ -1,0 +1,6 @@
+@EscolaEximia.HttpService_HostAddress = http://localhost:5153
+
+GET {{EscolaEximia.HttpService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
