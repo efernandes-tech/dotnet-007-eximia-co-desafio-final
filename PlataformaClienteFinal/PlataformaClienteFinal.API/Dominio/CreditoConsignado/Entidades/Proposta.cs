@@ -23,13 +23,18 @@ public sealed class Proposta : Entity<Guid>
 
     public static Result<Proposta> Criar(Cliente cliente, decimal valorOperacao, Agente agente)
     {
-        // DESAFIO: Cpf deve estar liberado (não pode estar bloqueado);
-        if (cliente.Bloqueado)
-            return Result.Failure<Proposta>("CPF do cliente bloqueado");
+        var validacoes = new List<IValidacaoProposta>
+        {
+            new ValidacaoClienteBloqueado(),
+            new ValidacaoAgenteInativo(),
+        };
 
-        // DESAFIO: Agente que está incluindo a proposta deve estar ativo;
-        if (agente.Ativo)
-            return Result.Failure<Proposta>("Agente inativo");
+        foreach (var validacao in validacoes)
+        {
+            var resultado = validacao.Validar(cliente, agente);
+            if (resultado.IsFailure)
+                return Result.Failure<Proposta>(resultado.Error);
+        }
 
         var proposta = new Proposta(
             Guid.NewGuid(),
@@ -43,4 +48,37 @@ public sealed class Proposta : Entity<Guid>
 }
 
 public enum EPropostaSituacao
-{ EmAnalise = 10, Aprovada = 20, Reprovada = 30 }
+{
+    EmAnalise = 10,
+    Aprovada = 20,
+    Reprovada = 30
+}
+
+public interface IValidacaoProposta
+{
+    Result Validar(Cliente cliente, Agente agente);
+}
+
+// DESAFIO: Cpf deve estar liberado (não pode estar bloqueado);
+public class ValidacaoClienteBloqueado : IValidacaoProposta
+{
+    public Result Validar(Cliente cliente, Agente agente)
+    {
+        if (cliente.Bloqueado)
+            return Result.Failure("CPF do cliente bloqueado");
+
+        return Result.Success();
+    }
+}
+
+// DESAFIO: Agente que está incluindo a proposta deve estar ativo;
+public class ValidacaoAgenteInativo : IValidacaoProposta
+{
+    public Result Validar(Cliente cliente, Agente agente)
+    {
+        if (!agente.Ativo)
+            return Result.Failure("Agente inativo");
+
+        return Result.Success();
+    }
+}
