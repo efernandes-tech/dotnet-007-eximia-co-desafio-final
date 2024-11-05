@@ -9,7 +9,7 @@ namespace EscolaEximia.HttpService.Dominio;
 
 public class InscricoesDbContext : DbContext
 {
-    public const string DEFAULT_SCHEMA = "inscricoes";
+    public const string DEFAULT_SCHEMA = "EscolaEximiaDB";
 
     public InscricoesDbContext(DbContextOptions<InscricoesDbContext> options) : base(options)
     {
@@ -61,7 +61,7 @@ public class MigrationsDbContextFactory : IDesignTimeDbContextFactory<Inscricoes
     public InscricoesDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<InscricoesDbContext>();
-        var connectionString = "Data Source=localhost,1434;Database=Produto_Cliente_Tenant;User Id=sa;Password=Test@12345;TrustServerCertificate=True;";
+        var connectionString = "Data Source=localhost,1433;Database=EscolaEximiaDB;User Id=sa;Password=SenhaForte123!;TrustServerCertificate=True;";
 
         optionsBuilder.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions =>
         {

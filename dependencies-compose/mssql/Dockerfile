@@ -1,6 +1,5 @@
 # We choose exact tag (not 'latest'), to be sure that new version wont break creating image
 FROM mcr.microsoft.com/mssql/server:2022-latest
-#FROM mcr.microsoft.com/mssql/server:2017-CU17-ubuntu
 
 USER root
 
