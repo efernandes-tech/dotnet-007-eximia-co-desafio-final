@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using PlataformaClienteFinal.API.Dominio.CreditoConsignado.Entidades;
+using PlataformaClienteFinal.API.Dominio.CreditoConsignado.Infraestrutura.Mapeamento;
 
 namespace PlataformaClienteFinal.API.Dominio;
 
@@ -44,7 +46,27 @@ public class PlataformaClienteFinalDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // TODO: Aplicar mapeamento
-        //modelBuilder.ApplyConfiguration(new PropostaCreditoConsignadosConfigurations());
+        modelBuilder.ApplyConfiguration(new AgenteConfiguration());
+        modelBuilder.ApplyConfiguration(new ClienteConfiguration());
+        modelBuilder.ApplyConfiguration(new PropostaConfiguration());
+    }
+}
+
+public class MigrationsDbContextFactory : IDesignTimeDbContextFactory<PlataformaClienteFinalDbContext>
+{
+    public PlataformaClienteFinalDbContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<PlataformaClienteFinalDbContext>();
+        var connectionString = "Server=localhost,1433;Database=PlataformaClienteFinalDB;User Id=sa;Password=SenhaForte123!;TrustServerCertificate=True;";
+
+        optionsBuilder.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        });
+
+        return new PlataformaClienteFinalDbContext(optionsBuilder.Options);
     }
 }

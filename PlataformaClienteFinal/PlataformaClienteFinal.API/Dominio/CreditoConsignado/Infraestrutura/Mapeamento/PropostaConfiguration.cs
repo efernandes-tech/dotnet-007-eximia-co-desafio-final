@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlataformaClienteFinal.API.Dominio.CreditoConsignado.Entidades;
 
 namespace PlataformaClienteFinal.API.Dominio.CreditoConsignado.Infraestrutura.Mapeamento;
@@ -21,12 +22,11 @@ public class PropostaConfiguration : IEntityTypeConfiguration<Proposta>
             .HasColumnType("decimal")
             .HasPrecision(18, 2);
 
-        //builder.Property(i => i.Responsavel)
-        //    .IsRequired()
-        //    .HasMaxLength(100);
-
-        //builder.Property(i => i.Ativa)
-        //    .IsRequired();
+        builder.Property(a => a.Situacao)
+            .IsRequired()
+            .HasConversion(new EnumToStringConverter<EPropostaSituacao>())
+            .HasColumnType("varchar(20)")
+            .IsRequired();
 
         builder.HasOne(i => i.Agente)
             .WithMany()

@@ -11,6 +11,9 @@ public sealed class Proposta : Entity<Guid>
     public Agente Agente { get; }
     public EPropostaSituacao Situacao { get; }
 
+    private Proposta()
+    { }
+
     private Proposta(Guid id, string cliente, decimal valorOperacao, Agente agente,
         EPropostaSituacao situacao)
     {
