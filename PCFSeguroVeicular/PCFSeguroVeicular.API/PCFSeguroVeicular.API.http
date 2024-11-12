@@ -1,0 +1,6 @@
+@PCFSeguroVeicular.API_HostAddress = http://localhost:5024
+
+GET {{PCFSeguroVeicular.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
