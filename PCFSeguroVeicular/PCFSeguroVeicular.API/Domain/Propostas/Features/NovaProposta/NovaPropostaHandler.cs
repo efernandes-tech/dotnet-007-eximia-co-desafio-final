@@ -49,7 +49,7 @@ public class NovaPropostaHandler(CoberturaRepository coberturaRepository,
 
         await propostaRepository.Adicionar(proposta.Value, cancellationToken);
 
-        await unitOfWork.CommitAsync(cancellationToken);
+        //await unitOfWork.CommitAsync(cancellationToken);
 
         // Iniciar workflow de aprovacao
 
